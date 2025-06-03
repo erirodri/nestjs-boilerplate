@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
   Query,
   HttpStatus,
   HttpCode,
@@ -15,15 +14,11 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
-  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { Roles } from '../roles/roles.decorator';
-import { RoleEnum } from '../roles/roles.enum';
-import { AuthGuard } from '@nestjs/passport';
 
 import {
   InfinityPaginationResponse,
@@ -33,12 +28,11 @@ import { NullableType } from '../utils/types/nullable.type';
 import { QueryUserDto } from './dto/query-user.dto';
 import { User } from './domain/user';
 import { UsersService } from './users.service';
-import { RolesGuard } from '../roles/roles.guard';
 import { infinityPagination } from '../utils/infinity-pagination';
 
-@ApiBearerAuth()
-@Roles(RoleEnum.admin)
-@UseGuards(AuthGuard('jwt'), RolesGuard)
+//@ApiBearerAuth()
+//@Roles(RoleEnum.admin)
+//@UseGuards(AuthGuard('jwt'), RolesGuard)
 @ApiTags('Users')
 @Controller({
   path: 'users',
@@ -48,6 +42,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiCreatedResponse({
+    description: 'The user has been successfully created.',
     type: User,
   })
   @SerializeOptions({
@@ -58,13 +53,13 @@ export class UsersController {
   create(@Body() createProfileDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createProfileDto);
   }
-
   @ApiOkResponse({
     type: InfinityPaginationResponse(User),
   })
-  @SerializeOptions({
+  /* @SerializeOptions({
     groups: ['admin'],
   })
+   */
   @Get()
   @HttpCode(HttpStatus.OK)
   async findAll(
@@ -92,9 +87,9 @@ export class UsersController {
   @ApiOkResponse({
     type: User,
   })
-  @SerializeOptions({
+  /*@SerializeOptions({
     groups: ['admin'],
-  })
+  })*/
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   @ApiParam({
@@ -105,13 +100,12 @@ export class UsersController {
   findOne(@Param('id') id: User['id']): Promise<NullableType<User>> {
     return this.usersService.findById(id);
   }
-
   @ApiOkResponse({
     type: User,
   })
-  @SerializeOptions({
+  /*@SerializeOptions({
     groups: ['admin'],
-  })
+  })*/
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
   @ApiParam({

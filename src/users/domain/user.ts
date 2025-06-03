@@ -1,80 +1,56 @@
 import { Exclude, Expose } from 'class-transformer';
-import { FileType } from '../../files/domain/file';
-import { Role } from '../../roles/domain/role';
-import { Status } from '../../statuses/domain/status';
 import { ApiProperty } from '@nestjs/swagger';
-import databaseConfig from '../../database/config/database.config';
-import { DatabaseConfig } from '../../database/config/database-config.type';
-
-// <database-block>
-const idType = (databaseConfig() as DatabaseConfig).isDocumentDatabase
-  ? String
-  : Number;
-// </database-block>
 
 export class User {
   @ApiProperty({
-    type: idType,
+    type: String,
+    example: '6837f0a14ca560c58ac34e50',
   })
-  id: number | string;
+  @Expose()
+  id: string;
 
   @ApiProperty({
     type: String,
-    example: 'john.doe@example.com',
+    example: 'adminUser',
   })
-  @Expose({ groups: ['me', 'admin'] })
-  email: string | null;
+  @Expose()
+  username: string;
 
   @Exclude({ toPlainOnly: true })
-  password?: string;
+  password: string;
 
   @ApiProperty({
     type: String,
-    example: 'email',
+    example: 'https://example.com/avatar.jpg',
   })
-  @Expose({ groups: ['me', 'admin'] })
-  provider: string;
+  @Expose()
+  avatar: string;
 
   @ApiProperty({
     type: String,
-    example: '1234567890',
+    example: 'example@example.com',
   })
-  @Expose({ groups: ['me', 'admin'] })
-  socialId?: string | null;
+  @Expose()
+  email: string;
+
+  @ApiProperty({
+    type: Boolean,
+    example: false,
+  })
+  @Expose()
+  is_disabled: boolean;
 
   @ApiProperty({
     type: String,
-    example: 'John',
+    example: '2024-05-29T00:00:00.000Z',
   })
-  firstName: string | null;
-
-  @ApiProperty({
-    type: String,
-    example: 'Doe',
-  })
-  lastName: string | null;
-
-  @ApiProperty({
-    type: () => FileType,
-  })
-  photo?: FileType | null;
-
-  @ApiProperty({
-    type: () => Role,
-  })
-  role?: Role | null;
-
-  @ApiProperty({
-    type: () => Status,
-  })
-  status?: Status;
-
-  @ApiProperty()
+  @Expose()
   createdAt: Date;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: String,
+    example: '2024-05-29T12:34:56.000Z',
+  })
+  @Expose()
   updatedAt: Date;
-
-  @ApiProperty()
-  deletedAt: Date;
 }

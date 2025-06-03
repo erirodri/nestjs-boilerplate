@@ -1,48 +1,33 @@
 import { PartialType, ApiPropertyOptional } from '@nestjs/swagger';
 import { CreateUserDto } from './create-user.dto';
-
-import { Transform, Type } from 'class-transformer';
-import { IsEmail, IsOptional, MinLength } from 'class-validator';
-import { FileDto } from '../../files/dto/file.dto';
-import { RoleDto } from '../../roles/dto/role.dto';
-import { StatusDto } from '../../statuses/dto/status.dto';
-import { lowerCaseTransformer } from '../../utils/transformers/lower-case.transformer';
+import { IsBoolean, IsEmail, IsOptional, IsString } from 'class-validator';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
-  @ApiPropertyOptional({ example: 'test1@example.com', type: String })
-  @Transform(lowerCaseTransformer)
+  @ApiPropertyOptional({ example: 'adminUser', type: String })
+  @IsOptional()
+  @IsString()
+  username?: string;
+
+  @ApiPropertyOptional({ example: 'adminUser@admin.com', type: String })
   @IsOptional()
   @IsEmail()
-  email?: string | null;
+  email?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ example: 'securePassword123', type: String })
   @IsOptional()
-  @MinLength(6)
+  @IsString()
   password?: string;
 
-  provider?: string;
-
-  socialId?: string | null;
-
-  @ApiPropertyOptional({ example: 'John', type: String })
+  @ApiPropertyOptional({
+    example: 'https://example.com/avatar.png',
+    type: String,
+  })
   @IsOptional()
-  firstName?: string | null;
+  @IsString()
+  avatar?: string;
 
-  @ApiPropertyOptional({ example: 'Doe', type: String })
+  @ApiPropertyOptional({ example: false, type: Boolean })
   @IsOptional()
-  lastName?: string | null;
-
-  @ApiPropertyOptional({ type: () => FileDto })
-  @IsOptional()
-  photo?: FileDto | null;
-
-  @ApiPropertyOptional({ type: () => RoleDto })
-  @IsOptional()
-  @Type(() => RoleDto)
-  role?: RoleDto | null;
-
-  @ApiPropertyOptional({ type: () => StatusDto })
-  @IsOptional()
-  @Type(() => StatusDto)
-  status?: StatusDto;
+  @IsBoolean()
+  is_disabled?: boolean;
 }

@@ -6,7 +6,7 @@ import { User } from '../../../../domain/user';
 import { UserRepository } from '../../user.repository';
 import { UserSchemaClass } from '../entities/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, Promise } from 'mongoose';
 import { UserMapper } from '../mappers/user.mapper';
 import { IPaginationOptions } from '../../../../../utils/types/pagination-options';
 
@@ -70,25 +70,7 @@ export class UsersDocumentRepository implements UserRepository {
 
   async findByEmail(email: User['email']): Promise<NullableType<User>> {
     if (!email) return null;
-
     const userObject = await this.usersModel.findOne({ email });
-    return userObject ? UserMapper.toDomain(userObject) : null;
-  }
-
-  async findBySocialIdAndProvider({
-    socialId,
-    provider,
-  }: {
-    socialId: User['socialId'];
-    provider: User['provider'];
-  }): Promise<NullableType<User>> {
-    if (!socialId || !provider) return null;
-
-    const userObject = await this.usersModel.findOne({
-      socialId,
-      provider,
-    });
-
     return userObject ? UserMapper.toDomain(userObject) : null;
   }
 
@@ -102,7 +84,6 @@ export class UsersDocumentRepository implements UserRepository {
     if (!user) {
       return null;
     }
-
     const userObject = await this.usersModel.findOneAndUpdate(
       filter,
       UserMapper.toPersistence({
@@ -119,5 +100,13 @@ export class UsersDocumentRepository implements UserRepository {
     await this.usersModel.deleteOne({
       _id: id.toString(),
     });
+  }
+
+  async findByUsername(
+    username: User['username'],
+  ): Promise<NullableType<User>> {
+    if (!username) return null;
+    const userObject = await this.usersModel.findOne({ username });
+    return userObject ? UserMapper.toDomain(userObject) : null;
   }
 }

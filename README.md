@@ -29,6 +29,7 @@ Belongs to the [bc boilerplates](https://bcboilerplates.com/) ecosystem
 - [x] Seeding.
 - [x] Config Service ([@nestjs/config](https://www.npmjs.com/package/@nestjs/config)).
 - [x] Admin and User roles.
+- [x] Common api response structure(interceptor).
 - [x] Internationalization/Translations (I18N) ([nestjs-i18n](https://www.npmjs.com/package/nestjs-i18n)).
 - [x] Swagger.
 - [x] E2E and units tests.
@@ -41,10 +42,18 @@ Belongs to the [bc boilerplates](https://bcboilerplates.com/) ecosystem
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tbody>
-    <tr>
-    </tr>
-  </tbody>
+    <thead>
+        <td>Username</td>
+        <td>Links</td>
+    </thead>
+    <tbody>
+        <tr>
+            <td>erirori</td>
+            <td><a href="https://gitlab.com/erirodri">gitlab</a> | <a href="https://github.com/erirodri">github</a></td>
+        </tr>
+        <tr>
+        </tr>
+    </tbody>
 </table>
 
 <!-- markdownlint-restore -->
